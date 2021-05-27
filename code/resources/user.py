@@ -14,23 +14,37 @@ class UserRegister(Resource):
         if UserModel.find_by_username(data["username"]):
             return {"message":f"user with name {data['username']} is alredy exists"} , 400
 
-        connection = sqlite3.connect("data.db")
-        cursor = connection.cursor()
-        query = "INSERT INTO users VALUES(NULL, ?, ?)"
-        cursor.execute(query, (data["username"], data["password"]))
+        user = UserModel(**data)
+        user.save_user_to_db()
+        # UserModel.save_user_to_db()
+        # connection = sqlite3.connect("data.db")
+        # cursor = connection.cursor()
+        # query = "INSERT INTO users VALUES(NULL, ?, ?)"
+        # cursor.execute(query, (data["username"], data["password"]))
 
-        connection.commit()
-        connection.close()
+        # connection.commit()
+        # connection.close()
 
         return {"message": "user created suceseful"}, 201
 
     def get(self):
+        return {"all users": [user.json() for user in UserModel.query.all()]} 
+
         connection = sqlite3.connect("data.db")
         cursor = connection.cursor()
         select_query = "SELECT * from users"
         result = []
 
         for row in cursor.execute(select_query):
-            result.append(row)
+            user = User(*row).json()
+            result.append(user)
 
         return {"all users": result}, 201
+
+class User:
+    def __init__(self, id, name, password):
+        self.id = id
+        self.name = name
+        self.password = password
+    def json(self):
+        return {"id": self.id, "name": self.name, "password": self.password}
