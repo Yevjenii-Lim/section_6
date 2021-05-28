@@ -61,8 +61,8 @@ class Item(Resource):
         try:
             item = ItemModel(request_data["name"], request_data["price"], request_data["store_id"])
             item.save_to_db()
-        except:
-            return {"message": "error"}, 500 #internal server error
+        except Exception as e:
+            return {"message": e}, 500 #internal server error
 
 
         return item.json(), 201
