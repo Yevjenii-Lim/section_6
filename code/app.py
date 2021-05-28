@@ -17,7 +17,7 @@ api = Api(app)
 
 jwt = JWT(app, authenticate, identity) # new endpoint  /auth
 app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(seconds=1800)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL","sqlite:///data.db") #"sqlite:///data.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URLL","sqlite:///data.db") #"sqlite:///data.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
